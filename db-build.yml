@@ -1,0 +1,17 @@
+---
+- hosts: db
+  remote_user: virtxpert
+  sudo: yes
+  tasks:
+  - name: install updated PostgreSQL PGDG
+    yum: name=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm state=present
+  - name: install postgresql93-server
+    yum: pkg=postgresql93-server state=latest
+  - name: initialize postgresql
+    shell: service postgresql-9.3 initdb
+    notify:
+       - start postgres
+
+  handlers:
+      - name: start postgres
+        service: name=postgresql-9.3 state=started enabled=yes

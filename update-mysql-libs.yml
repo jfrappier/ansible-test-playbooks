@@ -1,0 +1,8 @@
+---
+- hosts: db
+  remote_user: virtxpert
+  sudo: yes
+  tasks:
+  - name: update mysql-libs latest
+    yum: pkg=mysql-libs state=latest
+
