@@ -1,7 +1,7 @@
 ---
 - hosts: web
   remote_user: virtxpert
-  sudo: no
+  sudo: yes
   tasks:
   - name: install httpd latest
     yum: pkg=httpd state=latest
