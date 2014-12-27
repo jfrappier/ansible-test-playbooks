@@ -1,0 +1,15 @@
+---
+- hosts: web
+  remote_user: virtxpert
+  sudo: yes
+  tasks:
+  - name: install httpd latest
+    yum: pkg=http state=latest
+  - name: install php latest
+    yum: pkg=php state=latest
+    notify:
+       - start httpd
+
+  handlers:
+      - name: start httpd
+        service: name=http state=started enabled=yes
