@@ -4,20 +4,12 @@
   sudo: yes
   tasks:
   - name: install httpd latest
-<<<<<<< HEAD
     yum: pkg=httpd state=latest
-=======
-    yum: pkg=http state=latest
->>>>>>> 91238cec23852cb51badd1e532e71ea4361ca53c
   - name: install php latest
     yum: pkg=php state=latest
     notify:
        - start httpd
-
+	   
   handlers:
       - name: start httpd
-<<<<<<< HEAD
         service: name=httpd state=started enabled=yes
-=======
-        service: name=http state=started enabled=yes
->>>>>>> 91238cec23852cb51badd1e532e71ea4361ca53c
