@@ -12,3 +12,32 @@ A Commitmas miracle, 5 straight days of doing something on GitHub, and not havin
 
 ##Dec 26 2014
 Added web-build.yml example. Explored git commit --amend with errors in initial example.
+
+##Dec 27 2014
+Honing my markdown skills by:
+
+* Adding headers
++ Adding lists
+- Using either *, +, or -
+
+---
+Also looking at numbered lists
+
+1. Sequential numbers
+2. Such as 1., 2., etc...
+8. Work the same as numbers
+22. In any order
+42. For example the list you are reading here - 1., 2., 3., 4., 5. are actually numbered 1.,2.,8.,22.,42.!
+
+***
+
+		Indenting twice will set text as a code block
+
+        Or Indenting 4x spaces twice
+
+	    Or a combination of 1x indent and 4x spaces
+
+---
+
+Don't forget to visit [www.virtxpert.com](http://www.virtxpert.com "virtxpert.com") for my series on installing [Ansible](http://www.virtxpert.com/tag/ansible/ "Ansible series on virtxpert.com") or [vRealize Automation and Application Services](http://www.virtxpert.com/tag/vra/ "vRA and AppS series on virtxpert.com")
+	
