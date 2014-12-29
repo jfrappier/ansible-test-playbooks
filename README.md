@@ -40,4 +40,7 @@ Also looking at numbered lists
 ---
 
 Don't forget to visit [www.virtxpert.com](http://www.virtxpert.com "virtxpert.com") for my series on installing [Ansible](http://www.virtxpert.com/tag/ansible/ "Ansible series on virtxpert.com") or [vRealize Automation and Application Services](http://www.virtxpert.com/tag/vra/ "vRA and AppS series on virtxpert.com")
+
+##Dec 28 2014
+Commitmas commit time
 	
