@@ -43,4 +43,6 @@ Don't forget to visit [www.virtxpert.com](http://www.virtxpert.com "virtxpert.co
 
 ##Dec 28 2014
 Commitmas commit time
-	
+
+#Dec 31 2014
+Happy New Years! Don't worry, I've not missed my 12 days of Commitmas, I spent a couple of days commiting to a branch of the Ansible to update the documentation as I thought it needed a couple of tweaks.
