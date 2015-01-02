@@ -46,3 +46,6 @@ Commitmas commit time
 
 ##Dec 31 2014
 Happy New Years! Don't worry, I've not missed my 12 days of Commitmas, I spent a couple of days commiting to a branch of the Ansible to update the documentation as I thought it needed a couple of tweaks.
+
+##Jan 1 2015
+Hello 2015! Thank you to mjbrender for organizing Commitmas. GitHub was something I really didn't get before and now I at least have a basic understanding. Stay tuned for more GitHub goodness!
