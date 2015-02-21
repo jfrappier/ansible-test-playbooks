@@ -1,0 +1,66 @@
+#example Ansible playbook to create new vm in vCenter
+#based on limited testing, this appears to be the minimum required
+#with the exception of the vars_prompt section
+#
+#some vars_prompts included as examples
+#change vm properties (cpu, memory, disk) to fit your needs
+#update datastore, host, and datacenter values, or add additional prompts
+#
+#added
+#vm_extra_config:
+#  vcpu.hotadd: yes
+#  mem.hotadd: yes
+#below "state" to ensure vm can be reconfiugred by Ansible using 
+#state: reconfigured
+#instead of state: powered_on - vm_extra_config is not required
+
+---
+- hosts: 127.0.0.1
+  connection: local
+  user: root
+  sudo: false
+  gather_facts: false
+  serial: 1
+  
+  vars_prompt:
+  - name: "vc"
+    prompt: "vCenter Sever FQDN"
+    private: no
+  - name: "user"
+    prompt: "vCenter username"
+    private: no
+  - name: "pw"
+    prompt: "MOAR passwords"
+    private: yes
+  - name: "vm"
+    prompt: "Enter a VM name"
+    private: no
+
+  tasks:
+   - vsphere_guest:
+       vcenter_hostname: "{{vc}}"
+       username: "{{user}}""
+       password: "{{pw}}"
+       guest: "{{vm}}"
+       state: reconfigured
+       vm_extra_config:
+         vcpu.hotadd: yes
+         mem.hotadd: yes
+       vm_disk:
+         disk1:
+           size_gb: 2
+           type: thin
+           datastore: ENTER VALID DATASTORE
+       vm_nic:
+         nic1:
+           type: vmxnet3
+           network: vm
+           network_type: standard
+       vm_hardware:
+         memory_mb: 2048
+         num_cpus: 2
+         osid: centos64Guest
+         scsi: paravirtual
+       esxi:
+         datacenter: ENTER VALID VC DC
+         hostname: ENTER VALID ESXi HOST

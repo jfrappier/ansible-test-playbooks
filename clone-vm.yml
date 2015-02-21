@@ -1,0 +1,39 @@
+#example Ansible playbook to clone new vm in vCenter from template
+#based on limited testing, this appears to be the minimum required
+#with the exception of the vars_prompt section
+#
+#some vars_prompts included as examples
+#update template and cluster values, or add additional prompts
+
+---
+- hosts: 127.0.0.1
+  connection: local
+  user: root
+  sudo: false
+  gather_facts: false
+  serial: 1
+  
+  vars_prompt:
+  - name: "vc"
+    prompt: "vCenter Sever FQDN"
+    private: no
+  - name: "user"
+    prompt: "vCenter username"
+    private: no
+  - name: "pw"
+    prompt: "MOAR passwords"
+    private: yes
+  - name: "vm"
+    prompt: "Enter a VM name"
+    private: no
+
+  tasks:
+   - vsphere_guest:
+       vcenter_hostname: "{{vc}}"
+       username: "{{user}}"
+       password: "{{pw}}"
+       guest: "{{vm}}"
+       from_template: yes
+       template_src: ENTER VALID TEMPLATE
+       cluster: ENTER VALID CLUSTER
+       resource_pool: "/Resources"
