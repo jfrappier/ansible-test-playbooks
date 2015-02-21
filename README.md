@@ -15,5 +15,3 @@ Added examples from [#vBrownBag](http://professionalvmware.com "professionalvmwa
 * update-vm.yml
 
 ---
-
-Don't forget to visit [www.virtxpert.com](http://www.virtxpert.com "virtxpert.com") for my series on installing [Ansible](http://www.virtxpert.com/tag/ansible/ "Ansible series on virtxpert.com") or [vRealize Automation and Application Services](http://www.virtxpert.com/tag/vra/ "vRA and AppS series on virtxpert.com")
