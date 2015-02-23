@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Ansible & vCenter by @jfrappier</title> 
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" 
+     href="slidy.css" />
+    <link rel="stylesheet" type="text/css" media="screen, projection, print" 
+     href="style.css" />
+    <script src="showdown.js"></script>
+    <script src="slidy.js"></script>
+    
+</head>
+<body>
+<script type=text/markdown>
+<!--
+
+-----------------------------------------------------
+
+#\#vBrownBag - Getting started with Ansible & vCenter!
+###Jonathan Frappier
+###@jfrappier & www.virtxpert.com
+
+![Sample inventory file](http://www.virtxpert.com/wp-content/uploads/2015/02/cowsay1.png "Sample inventory file")
+
+-----------------------------------------------------
+
+# Agenda
+* Overview/Review of an invenorty file
+* Overview/Review of a basic playbook
+* Example vCenter playbook
+* Using vars_prompt to ask for input
+* Check out 
+* http://professionalvmware.com/2014/11/vbrownbag-devops-follow-up-learning-ansible-with-jeff-geerling-geerlingguy/
+* https://leanpub.com/ansible-for-devops
+
+-----------------------------------------------------
+
+#So...why?
+
+* You need configuration management
+* Why not make it a simple, flexible tool such as Ansible?
+* Ansible just so happens to also be able to create VMs, clone templates, and pull VM information!
+
+![Sample inventory file](http://fc09.deviantart.net/fs70/i/2010/319/d/7/starkiller_02_by_britolitos96-d32whsx.jpg "Sample inventory file")
+
+-----------------------------------------------------
+
+#Overview/Review of an invenorty file
+
+* Used to lists host being managed by Ansible
+* Can be static or dynamic
+* Simple with a list of all managed hosts
+* Broken into groups
+* Configured with ranges
+
+-----------------------------------------------------
+
+#Simple inventory file
+
+127.0.0.1
+
+![Sample inventory file](http://www.virtxpert.com/wp-content/uploads/2014/11/ansible-hosts-file.png "Sample inventory file")
+
+-----------------------------------------------------
+
+#Simple inventory file MOAR hosts
+
+To add another host, just add another line
+> echo "192.168.6.137" >> /etc/ansible/hosts
+
+![Sample inventory file](http://www.virtxpert.com/wp-content/uploads/2014/11/ansible-hosts-file-two-hosts.png "Sample inventory file")
+
+-----------------------------------------------------
+
+#Inventory file with groups
+
+Enter group name between []
+
+e.g. [web] or [db]
+
+![Sample inventory file](http://www.virtxpert.com/wp-content/uploads/2014/11/ansible-hosts-groups.png "Sample inventory file")
+
+-----------------------------------------------------
+
+#Inventory file with groups & ranges
+
+Enter ranges in [] separated by :
+
+e.g. [136:138] or [1:254]
+
+![Sample inventory file](http://www.virtxpert.com/wp-content/uploads/2014/11/ansible-hosts-group-range.png "Sample inventory file")
+
+-----------------------------------------------------
+
+#Simple playbook
+
+Includes hosts and tasks
+
+	---  
+	- hosts: db  
+	  remote_user: root
+    
+	tasks:  
+	 - name: update mysql-libs-latest  
+	   yum: pkg=mysql-libs state=latest   
+
+-----------------------------------------------------
+
+#Slightly less, but still simple playbook
+	---
+	- hosts: db
+	  remote_user: virtxpert
+	  sudo: yes
+	  tasks:
+	  - name: install updated PostgreSQL PGDG
+		yum: name=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm state=present
+	  - name: install postgresql93-server
+		yum: pkg=postgresql93-server state=latest
+	  - name: initialize postgresql
+		shell: service postgresql-9.3 initdb
+	  notify:
+		 - start postgres
+
+	  handlers:
+		 - name: start postgres
+		 service: name=postgresql-9.3 state=started enabled=yes
+
+-----------------------------------------------------
+
+#Prereqs for vCenter
+
+	sudo pip install -U pysphere
+
+-----------------------------------------------------
+
+#Create a virtual machine in vCenter
+
+	- hosts: 127.0.0.1
+	  connection: local
+	  user: root
+	  sudo: false
+	  gather_facts: false
+	  serial: 1
+
+	  tasks:
+	  - vsphere_guest:
+		  vcenter_hostname: vxprt-vc01.vxprt.local
+		  username: administrator@vxprt.local
+		  password: ********
+		  guest: testansible01
+		  state: powered_on
+		  vm_disk:
+			disk1:
+			size_gb: 1
+			type: thin
+			datastore: vxprt-esxi01-gold-local
+		  vm_nic:
+			nic1:
+			type: vmxnet3
+			network: vm
+			network_type: standard
+		  vm_hardware:
+			memory_mb: 1024
+			num_cpus: 1
+			osid: centos64Guest
+			scsi: paravirtual
+		  esxi:
+			datacenter: dc01
+			hostname: vxprt-esxi01.vxprt.local
+
+-----------------------------------------------------
+
+#Clone a template
+
+	- hosts: 127.0.0.1
+		  connection: local
+		  user: root
+		  sudo: false
+		  gather_facts: false
+		  serial: 1
+		  
+	- vsphere_guest:
+		vcenter_hostname: vxprt-vc01.vxprt.local
+		username: administrator@vxprt.local
+		password: *********
+		guest: testansible02
+		from_template: yes
+		template_src: centosTemplate
+		cluster: dc01
+		resource_pool: "/rp01"
+
+-----------------------------------------------------
+
+#vars_prompt
+
+	vars_prompt:
+
+	- name: "some_password"
+	  prompt: "Enter password"
+	  private: yes
+	  
+	- vsphere_guest:
+		vcenter_hostname: vxprt-vc01.vxprt.local
+		username: administrator@vxprt.local
+		password: "{{some_password}}"
+		guest: testansible03
+		from_template: yes
+		template_src: centosTemplate
+		cluster: dc01
+		resource_pool: "/rp01"
+		
+-----------------------------------------------------
+
+#Demo time
+
+![Sample inventory file](https://app.box.com/shared/static/owiql1782e3n9346hlsy1hm96ahrhyee.png "Sample inventory file")
+
+-----------------------------------------------------
+
+#Wrap up
+
+* Check out 
+* http://professionalvmware.com/2014/11/vbrownbag-devops-follow-up-learning-ansible-with-jeff-geerling-geerlingguy/
+* https://leanpub.com/ansible-for-devops
+* http://www.virtxpert.com/?s=ansible
+
+Thank you!
+
+-----------------------------------------------------  
+-->
+</script>
+<script>
+var scripts = document.getElementsByTagName('script');
+for (var i = 0; i < scripts.length; i++){
+    var script = scripts[i];
+    if (script.type != 'text/markdown') continue;
+    var md = script.innerHTML.replace(/^\s<!--*/, '')
+        .replace(/-->\s*$/, '');
+    var markup = new Showdown.converter().makeHtml(md);
+    var slides = markup.split('<hr />');
+    for (var j = 0; j < slides.length; j++)
+        document.write('<div class=slide>' + slides[j] + '</div>');
+}
+w3c_slidy.add_listener(document.body, "touchend", w3c_slidy.mouse_button_click);
+</script>
+</body>
+</html>
