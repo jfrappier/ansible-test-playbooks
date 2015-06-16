@@ -8,7 +8,7 @@
       dl_dir: /downloads
       sysdig_ins: install-sysdig
       sysdig_repo: http://download.draios.com/stable/deb stable-$(ARCH)/
-      linux_headers: linux-headers-$(uname -r)
+      linux_headers: linux-headers-{{ ansible_kernel }}
   remote_user: jonf
   sudo: yes
 
@@ -28,8 +28,8 @@
   - name: Update apt repositories
     apt: update_cache=yes
 
-#  - name: Install Linux Headers
-#    apt: name={{ linux_headers }} state=present
+  - name: Install Linux Headers
+    apt: name={{ linux_headers }} state=present
 
   - name: Install Sysdig
     apt: name={{ package }} state=present
