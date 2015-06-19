@@ -1,0 +1,35 @@
+---
+- hosts: parent
+  vars:
+      package: sysdig
+      sysdig_key_url: https://s3.amazonaws.com/download.draios.com
+      sysdig_key: DRAIOS-GPG-KEY.public
+      sysdig_url: https://s3.amazonaws.com/download.draios.com/stable/install-sysdig
+      dl_dir: /downloads
+      sysdig_ins: install-sysdig
+      sysdig_repo: http://download.draios.com/stable/deb stable-$(ARCH)/
+      linux_headers: linux-headers-{{ ansible_kernel }}
+  remote_user: jonf
+  sudo: yes
+
+  tasks:
+  - name: Validating download directory
+    file: path={{ dl_dir }} state=directory
+
+  - name: Download Sysdig public key
+    get_url: url={{ sysdig_key_url }}/{{ sysdig_key }} dest={{ dl_dir }} validate_certs=no
+
+  - name: Installing Sysdig public key
+    apt_key: file={{ dl_dir }}/{{ sysdig_key }} state=present
+
+  - name: Adding Sysdig apt repository
+    apt_repository: repo='deb {{ sysdig_repo }}' state=present
+
+  - name: Update apt repositories
+    apt: update_cache=yes
+
+  - name: Install Linux Headers
+    apt: name={{ linux_headers }} state=present
+
+  - name: Install Sysdig
+    apt: name={{ package }} state=present
