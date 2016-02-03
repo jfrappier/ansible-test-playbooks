@@ -3,9 +3,9 @@
   hosts: localhost
   vars:
    - esxihosts:
-     - vxprt-esxi01.vxprt.local
-     - vxprt-esxi02.vxprt.local
-     - vxprt-esxi03.vxprt.local
+     - vxprt-esxi01
+     - vxprt-esxi02
+     - vxprt-esxi03
   tasks:   
 
    - name: Configure ESXi DNS 
