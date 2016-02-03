@@ -1,0 +1,21 @@
+---
+-  
+  hosts: localhost
+  vars:
+   - esxihosts:
+     - vxprt-esxi01.vxprt.local
+     - vxprt-esxi02.vxprt.local
+     - vxprt-esxi03.vxprt.local
+  tasks:   
+
+   - name: Configure ESXi DNS 
+     local_action:
+       module: vmware_dns_config
+       hostname: "{{ item }}" 
+       username: root
+       password: P@ssw0rd
+       change_hostname_to: "{{ item }}"
+       domainname: vxprt.local
+       dns_servers:
+           - 192.168.72.200
+     with_items: esxihosts 

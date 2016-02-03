@@ -1,5 +1,5 @@
 ---
-- hosts: parent
+- hosts: sysdig
   vars:
       package: sysdig
       sysdig_key_url: https://s3.amazonaws.com/download.draios.com
@@ -9,7 +9,7 @@
       sysdig_ins: install-sysdig
       sysdig_repo: http://download.draios.com/stable/deb stable-$(ARCH)/
       linux_headers: linux-headers-{{ ansible_kernel }}
-  remote_user: jonf
+  remote_user: virtxpert
   sudo: yes
 
   tasks:
