@@ -1,0 +1,15 @@
+---
+-  
+  hosts: localhost
+  vars:
+   - esxihosts:
+     - vxprt-esxi01
+  tasks:   
+
+   - name: Gater facts on virtual machines
+     local_action:
+       module: vmware_vm_facts
+       hostname: "{{ item }}" 
+       username: root
+       password: P@ssw0rd
+     with_items: esxihosts 

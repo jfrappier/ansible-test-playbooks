@@ -1,0 +1,29 @@
+---
+-  
+  hosts: localhost
+  vars:
+   - vcenter:
+     - 192.168.72.201
+   - dc:
+     - vxprt-dc
+   - cl:
+     - vxprt-cl01
+  vars_prompt:
+   - name: "esxi"
+     prompt: "ESXi hostname (must be resolvable)"
+     private: no
+  tasks:   
+
+   - name: Add ESXi host to vCenter 
+     local_action:
+       module: vmware_host
+       validate_certs: false
+       hostname: "{{ vcenter }}"
+       username: app_li_vc
+       password: P@ssw0rd
+       datacenter_name: "{{ dc }}"
+       cluster_name: "{{ cl }}" 
+       esxi_hostname: "{{ esxi }}"
+       esxi_username: root
+       esxi_password: P@ssw0rd
+       state: present
