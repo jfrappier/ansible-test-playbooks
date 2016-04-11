@@ -6,3 +6,6 @@ On the first day of #Commitmas my patience gave to me, installing git on Windows
 
 ##Dec 22 2014
 2nd edit, setup additional systems to access account
+
+##Apr 11 2016
+Attempt at adding in as a submodule.
