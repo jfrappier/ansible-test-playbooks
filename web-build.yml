@@ -1,6 +1,7 @@
 ---
 - hosts: web
   remote_user: ansible_remote
+  become_method: sudo
   become: yes
 
   tasks:
