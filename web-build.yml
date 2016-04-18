@@ -1,15 +1,36 @@
 ---
 - hosts: web
-  remote_user: virtxpert
-  sudo: yes
+  remote_user: ansible_remote
+  become: yes
+
   tasks:
-  - name: install httpd latest
-    yum: pkg=httpd state=latest
-  - name: install php latest
-    yum: pkg=php state=latest
-    notify:
-       - start httpd
-	   
+    - name: install apache2 latest
+      apt: pkg=apache2 state=latest
+      when: ansible_os_family == 'Debian'
+
+    - name: install php latest
+      apt: pkg=php5 state=latest
+      when: ansible_os_family == 'Debian'
+      notify: restart_apache2
+
+    - name: install httpd latest
+      yum: pkg=httpd state=latest
+      when: ansible_os_family == 'RedHat'
+
+    - name: install php latest
+      yum: pkg=php state=latest
+      when: ansible_os_family == 'RedHat'
+      notify: restart_httpd
+
   handlers:
-      - name: start httpd
-        service: name=httpd state=started enabled=yes
+    - name: restart_apache2
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
+
+    - name: restart_httpd
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
