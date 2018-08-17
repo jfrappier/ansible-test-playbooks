@@ -30,5 +30,6 @@
   - name: write logs to file
     copy:
       content: "{{ item.content }}"
-      dest: "logs.txt"
+      dest: "/path/folder/logs/logs{{ item.item.id}}.txt"
     with_items: "{{ logs | json_query('results') }}"
+
