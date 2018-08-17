@@ -13,10 +13,6 @@
       return_content: yes
     register: results_json
 
-  - name: set array
-    set_fact:
-      all_ids: "{{ results_json.json.response_map.entries | map(attribute='id') | list }}"
-
   - name: get specific job run
     uri:
       force_basic_auth: yes
@@ -30,3 +26,9 @@
       return_content: yes
     with_items: "{{ results_json.json.response_map.entries }}"
     register: logs
+    
+  - name: write logs to file
+    copy:
+      content: "{{ item.content }}"
+      dest: "logs.txt"
+    with_items: "{{ logs | json_query('results') }}"
