@@ -1,0 +1,32 @@
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  tasks:
+  - name: get job runs
+    uri:
+      url: <url of rest api>
+      force_basic_auth: yes
+      body_format: json
+      method: GET
+      user: <username>
+      password: <password>
+      return_content: yes
+    register: results_json
+
+  - name: set array
+    set_fact:
+      all_ids: "{{ results_json.json.response_map.entries | map(attribute='id') | list }}"
+
+  - name: get specific job run
+    uri:
+      force_basic_auth: yes
+      body_format: json
+      method: GET
+      user: <username>
+      password: <password>
+      url: "<url of rest api>id={{ item.id }}&log_level=error"
+      body_format: json
+      method: GET
+      return_content: yes
+    with_items: "{{ results_json.json.response_map.entries }}"
+    register: logs
