@@ -1,0 +1,19 @@
+#Example of how to get a date in the past into variable to use in playbook such as passing date to a command or naming file with current date
+#Should work with all linux date formats - e.g. %Y - 4 digit year or %y for 2 digit year.
+#Add separators to date as needed - e.g. %m-%d-%y will produce MM-DD-YY or %m/%d/%Y MM/DD/YYY
+#After date command add/subtract from date as needed. In the example below getting 7 days priors. To add 7 days (e.g. week in the future) use +7 
+---
+- name: date example
+  hosts: localhost
+  become: false
+  gather_facts: yes
+
+  tasks:
+    - name: get date
+      command: date +'%m/%d/%y' -d '-7 days'
+      register: lastweek
+      delegate_to: localhost
+
+    - name: date
+      debug:
+        msg: "{{ lastweek.stdout }}"
