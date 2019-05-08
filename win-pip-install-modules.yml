@@ -1,0 +1,20 @@
+#This playbook requires a file in pip list --format=freeze format of required Python modules. 
+#It then runs that same command via win_command module and uses a built in Ansible filter to diff the current list vs the local required list
+#Assumes WinRM and necessary firewall ports working to remote Windows host
+---
+- name: manage windows scheduled tasks
+  hosts: yourhosts #run playbook with -i ./inventory/inventory_file or with inventory defined in /etc/ansible/hosts
+  become: false
+  gather_facts: yes
+  vars:
+    reqpythonmods: "{{ lookup('file', './reqpythonmods') }}" #list of required python modules
+
+  tasks:
+  - name: check currently installed python modules
+    win_command: pip list --format=freeze
+    register: curpythonmods
+
+  - name: install python modules
+    win_command: python -m pip install "{{ item }}"
+    with_items:
+      - "{{ reqpythonmods | difference(curpythonmods.stdout_lines) }}"
