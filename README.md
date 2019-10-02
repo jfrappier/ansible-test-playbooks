@@ -15,3 +15,6 @@ Added examples from [#vBrownBag](http://professionalvmware.com "professionalvmwa
 * update-vm.yml
 
 ---
+
+##Apr 2016
+This is a test submodule PR
